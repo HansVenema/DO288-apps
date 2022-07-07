@@ -1,0 +1,226 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: todo-migrate
+    app.openshift.io/vcs-uri: https://github.com/HansVenema/DO288-apps
+    deployment.kubernetes.io/revision: "3"
+    jkube.io/git-branch: todo-migrate
+    jkube.io/git-commit: 560c4efaf31f00f87aa6fe28fe784d231aabbd0a
+    jkube.io/git-url: https://github.com/HansVenema/DO288-apps
+  creationTimestamp: "2022-07-07T12:26:21Z"
+  generation: 3
+  labels:
+    app: todo-api
+    group: com.redhat.training.openshift.todoapi
+    provider: jkube
+    version: 1.0.0-SNAPSHOT
+  managedFields:
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:app.openshift.io/vcs-ref: {}
+          f:app.openshift.io/vcs-uri: {}
+          f:jkube.io/git-branch: {}
+          f:jkube.io/git-commit: {}
+          f:jkube.io/git-url: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:group: {}
+          f:provider: {}
+          f:version: {}
+      f:spec:
+        f:progressDeadlineSeconds: {}
+        f:replicas: {}
+        f:revisionHistoryLimit: {}
+        f:selector:
+          f:matchLabels:
+            .: {}
+            f:app: {}
+            f:group: {}
+            f:provider: {}
+        f:strategy:
+          f:rollingUpdate:
+            .: {}
+            f:maxSurge: {}
+            f:maxUnavailable: {}
+          f:type: {}
+        f:template:
+          f:metadata:
+            f:labels:
+              .: {}
+              f:app: {}
+              f:group: {}
+              f:provider: {}
+              f:version: {}
+          f:spec:
+            f:containers:
+              k:{"name":"quarkus"}:
+                .: {}
+                f:env:
+                  .: {}
+                  k:{"name":"KUBERNETES_NAMESPACE"}:
+                    .: {}
+                    f:name: {}
+                    f:valueFrom:
+                      .: {}
+                      f:fieldRef:
+                        .: {}
+                        f:apiVersion: {}
+                        f:fieldPath: {}
+                f:image: {}
+                f:imagePullPolicy: {}
+                f:name: {}
+                f:ports:
+                  .: {}
+                  k:{"containerPort":8080,"protocol":"TCP"}:
+                    .: {}
+                    f:containerPort: {}
+                    f:name: {}
+                    f:protocol: {}
+                  k:{"containerPort":8778,"protocol":"TCP"}:
+                    .: {}
+                    f:containerPort: {}
+                    f:name: {}
+                    f:protocol: {}
+                  k:{"containerPort":9779,"protocol":"TCP"}:
+                    .: {}
+                    f:containerPort: {}
+                    f:name: {}
+                    f:protocol: {}
+                f:resources: {}
+                f:securityContext:
+                  .: {}
+                  f:privileged: {}
+                f:terminationMessagePath: {}
+                f:terminationMessagePolicy: {}
+            f:dnsPolicy: {}
+            f:restartPolicy: {}
+            f:schedulerName: {}
+            f:securityContext: {}
+            f:terminationGracePeriodSeconds: {}
+    manager: okhttp
+    operation: Update
+    time: "2022-07-07T12:26:21Z"
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:template:
+          f:spec:
+            f:containers:
+              k:{"name":"quarkus"}:
+                f:envFrom: {}
+    manager: kubectl-edit
+    operation: Update
+    time: "2022-07-07T12:37:58Z"
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:deployment.kubernetes.io/revision: {}
+      f:status:
+        f:availableReplicas: {}
+        f:conditions:
+          k:{"type":"Available"}:
+            f:lastTransitionTime: {}
+            f:lastUpdateTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+          k:{"type":"Progressing"}:
+            f:lastUpdateTime: {}
+            f:message: {}
+            f:reason: {}
+        f:observedGeneration: {}
+        f:readyReplicas: {}
+        f:replicas: {}
+        f:updatedReplicas: {}
+    manager: kube-controller-manager
+    operation: Update
+    time: "2022-07-07T12:38:02Z"
+  name: todo-api
+  namespace: olxntf-todo-migrate
+  resourceVersion: "87263087"
+  selfLink: /apis/apps/v1/namespaces/olxntf-todo-migrate/deployments/todo-api
+  uid: 475b344b-c8ba-4948-b933-b753ddd1f653
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: todo-api
+      group: com.redhat.training.openshift.todoapi
+      provider: jkube
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: todo-api
+        group: com.redhat.training.openshift.todoapi
+        provider: jkube
+        version: 1.0.0-SNAPSHOT
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        envFrom:
+        - configMapRef:
+            name: configmap-todo
+        image: image-registry.openshift-image-registry.svc:5000/olxntf-todo-migrate/todo-api@sha256:f7eea5922874d090240e13b8bb8384cb300f8bdd36fb0f8677d01313835d9eaa
+        imagePullPolicy: IfNotPresent
+        name: quarkus
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9779
+          name: prometheus
+          protocol: TCP
+        - containerPort: 8778
+          name: jolokia
+          protocol: TCP
+        resources: {}
+        securityContext:
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2022-07-07T12:38:02Z"
+    lastUpdateTime: "2022-07-07T12:38:02Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2022-07-07T12:26:21Z"
+    lastUpdateTime: "2022-07-07T12:38:02Z"
+    message: ReplicaSet "todo-api-584494784f" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 3
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
